@@ -74,23 +74,23 @@ foreach ($events as $event) {
                 [
                     "title" => "深沢もえ",
                     "subtitle" => "渋谷大好き❤❤️❤",
-                    "img_url" => "https://line-deliver-bot.herokuapp.com/root/woman1.jpeg"
+                    "img_url" => "https://line-bot0202.herokuapp.com/img/woman1.jpeg"
                 ],
                 [
                     "title" => "佐々木しおり",
                     "subtitle" => "109大好き！！働いてもいます！！",
-                    "img_url" => "https://line-deliver-bot.herokuapp.com/root/woman2.jpeg"
+                    "img_url" => "https://line-bot0202.herokuapp.com/img/woman2.jpeg"
                 ],
                 [
                     "title" => "竹村まりか",
                     "subtitle" => "EDMとか好きです！！今年フェスどこいこっかな〜〜〜",
-                    "img_url" => "https://line-deliver-bot.herokuapp.com/root/woman3.jpeg"
+                    "img_url" => "https://line-bot0202.herokuapp.com/img/woman3.jpeg"
                 ]
             ];
 
             foreach ($items as $item) {
                 $message_builder = new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder("詳細を見る","detail");
-                $postback_builder = new \LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder("このまとめを書く","fashion");
+                $postback_builder = new \LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder("この人のまとめを見る","fashion");
 
 
                 //カルーセルのカラムを作成する
