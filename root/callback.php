@@ -68,6 +68,44 @@ foreach ($events as $event) {
             $muiti_builder->add($fashion_text);
             $muiti_builder->add($shop_text);
             $bot->replyMessage($reply_token,$muiti_builder);
+        }elseif (preg_match('/^これを見る$/',$text)){
+            $columns = [];
+            $items = [
+                [
+                    "title" => "深沢もえ",
+                    "subtitle" => "渋谷大好き❤❤️❤",
+                    "img_url" => "https://line-deliver-bot.herokuapp.com/root/woman1.jpeg"
+                ],
+                [
+                    "title" => "佐々木しおり",
+                    "subtitle" => "109大好き！！働いてもいます！！",
+                    "img_url" => "https://line-deliver-bot.herokuapp.com/root/woman2.jpeg"
+                ],
+                [
+                    "title" => "竹村まりか",
+                    "subtitle" => "EDMとか好きです！！今年フェスどこいこっかな〜〜〜",
+                    "img_url" => "https://line-deliver-bot.herokuapp.com/root/woman3.jpeg"
+                ]
+            ];
+
+            foreach ($items as $item) {
+                $message_builder = new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder("詳細を見る","detail");
+                $postback_builder = new \LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder("このまとめを書く","fashion");
+
+
+                //カルーセルのカラムを作成する
+                $colunm = new LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
+                    $item["title"],
+                    $item["subtitle"],
+                    $item["img_url"],
+                    [$message_builder,$postback_builder]);
+
+                $columns[] =  $colunm;
+            }
+
+            $carouselbuilder = new LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder($columns);
+            $templatemessagebuilder = new LINE\LINEBot\MessageBuilder\TemplateMessageBuilder("代わりのテキスト",$carouselbuilder);
+
         }else{
             $response = $bot->replyText($reply_token, $text);
         }
@@ -171,47 +209,18 @@ foreach ($events as $event) {
         $muiti_builder->add($shop_text);
         $bot->replyMessage($reply_token,$muiti_builder);
 
-//        $columns = [];
-//        $items = [0,1,2];
-//        foreach ($items as $item) {
-//            $uriaction_builder = new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder("ここを押してね","https://cdn-images-1.medium.com/max/800/1*BUWSUWN8817VsQvuUNeBpA.jpeg");
-//            $message_builder = new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder("ここを押してね","1を選ぶ");
-//            $postback_builder = new \LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder("ここを押してね","3を選ぶ");
-//
-//
-//            //カルーセルのカラムを作成する
-//            $colunm = new LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
-//                "今書いて欲しい記事",
-//                "ここにあるものから選んでね！",
-//                "https://cdn-images-1.medium.com/max/800/1*BUWSUWN8817VsQvuUNeBpA.jpeg",
-//                [$uriaction_builder,$message_builder,$postback_builder]);
-//
-//            $columns[] =  $colunm;
-//        }
-//
-//        $carouselbuilder = new LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder($columns);
-//        $templatemessagebuilder = new LINE\LINEBot\MessageBuilder\TemplateMessageBuilder("代わりのテキスト",$carouselbuilder);
-//
-//        //確認ボタン
-//        // yes とは no はpostbackに格納されるデータ
-//        $yes_btn = new \LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder("はい","yes");
-//        $no_btn = new \LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder("いいえ","no");
-//        $confirm = new LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder("今日は記事を書きますか？",[$yes_btn,$no_btn]);
-//        $confirm_msg = new \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder("今日の記事",$confirm);
-//
-//        $muiti_builder = new LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-//        $muiti_builder->add($templatemessagebuilder);
-//        $muiti_builder->add($confirm_msg);
-//        $bot->replyMessage($reply_token,$muiti_builder);
+
     }elseif ($event instanceof FollowEvent) {
 
         $profile_data = $bot->getProfile($event->getUserId())->getJSONDecodedBody();
+        $profile_pictureUrl = $profile_data["pictureUrl"];
+
         error_log("8P BOT FOLLOWED: {$event->getUserId()}: {$profile_data['displayName']}");
         $reply_token = $event->getReplyToken();
 
-        $text_builder1 = new LINE\LINEBot\MessageBuilder\TextMessageBuilder("友達追加してくれてありがとう！！".$profile_data['displayName']);
-        $text_builder2 = new LINE\LINEBot\MessageBuilder\TextMessageBuilder("ぷっぴだよ~~。みんなに日々の日常や出来事をまとめて教えて欲しいんだ！！");
-        $text_builder3  = new LINE\LINEBot\MessageBuilder\TextMessageBuilder("今欲しいまとめはこちら");
+        $text_builder1 = new LINE\LINEBot\MessageBuilder\TextMessageBuilder("友達追加してくれてありがとう！！".$profile_pictureUrl);
+        $text_builder2 = new LINE\LINEBot\MessageBuilder\TextMessageBuilder("ぷっぴだよ~~。流行をいち早くお届けするね！！");
+        $text_builder3  = new LINE\LINEBot\MessageBuilder\TextMessageBuilder("どのまとめが読みたいかな？");
 
         $image_builder = new LINE\LINEBot\MessageBuilder\ImageMessageBuilder("https://line-bot0202.herokuapp.com/img/puppi.jpeg","https://line-bot0202.herokuapp.com/img/puppi.jpeg");
 
@@ -271,32 +280,30 @@ foreach ($events as $event) {
                 $items = [
                     [
                         "title" => "渋谷のオススメグルメ",
-                        "subtitle" => "渋谷で流行っているお店を教えて欲しいな",
+                        "subtitle" => "渋谷で流行っているお店を教えちゃうぞ！！",
                         "img_url" => "https://d3ftecjsng6jy5.cloudfront.net/images/topic/1478/ce21c78040adc23e8594f9e854309f853bbc1d3f_56750a04314cf_p.jpeg"
                     ],
                     [
                         "title" => "渋谷のオススメファッション",
-                        "subtitle" => "流行を先取り！！冬物コーデにオススメのお店を教えて欲しいな！",
+                        "subtitle" => "流行を先取り！！冬物コーデは外せない！！",
                         "img_url" => "https://cdn.top.tsite.jp/static/top/sys/contents_image/media_image/030/908/595/30908595_0.jpeg"
                     ],
                     [
                         "title" => "渋谷のデートスポット",
-                        "subtitle" => "渋谷でデートするならこれ！！ってお店を教えて欲しいな",
+                        "subtitle" => "デートをお願いするならこちら！！",
                         "img_url" => "https://fanblogs.jp/riko0723/file/image/image-a8d47.jpeg"
                     ]
                 ];
 
                 foreach ($items as $item) {
-                    $message_builder = new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder("詳細を見る","detail");
-                    $postback_builder = new \LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder("このまとめを書く","fashion");
-
+                    $message_builder = new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder("これを見る","これを見る");
 
                     //カルーセルのカラムを作成する
                     $colunm = new LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
                         $item["title"],
                         $item["subtitle"],
                         $item["img_url"],
-                        [$message_builder,$postback_builder]);
+                        [$message_builder]);
 
                     $columns[] =  $colunm;
                 }
