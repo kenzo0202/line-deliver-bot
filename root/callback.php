@@ -244,7 +244,7 @@ foreach ($events as $event) {
         ];
 
         foreach ($items as $item) {
-            $message_builder = new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder("詳細を見る","detail");
+            $message_builder = new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder("これを見る","これを見る");
 
             //カルーセルのカラムを作成する
             $colunm = new LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
