@@ -89,7 +89,7 @@ foreach ($events as $event) {
             ];
 
             foreach ($items as $item) {
-                $message_builder = new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder("詳細を見る","detail");
+                $message_builder = new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder("この人の詳細を見る","detail");
                 $postback_builder = new \LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder("この人のまとめを見る","fashion");
 
 
@@ -321,11 +321,15 @@ foreach ($events as $event) {
 
             }elseif (isset($data["fashion"])){
                 $reply_token = $event->getReplyToken();
-                $fashion_text = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("ファッションだね！！今渋谷で流行しているファッションを教えて欲しいな");
-                $shop_text = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("お店の名前は？？");
+                $fashion_text = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("今渋谷で流行しているファッションを教えるね！！");
+                $shop_text = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("BEAMSっていうお店が今お気に入りで、無難かつちょっといい服が売ってるセレクトショップだよ！！");
+                $shop_img = new LINE\LINEBot\MessageBuilder\ImageMessageBuilder("https://line-bot0202.herokuapp.com/img/sample.jpeg","https://line-bot0202.herokuapp.com/img/sample.jpeg");
+                $shop_stamp = new LINE\LINEBot\MessageBuilder\StickerMessageBuilder("1","13");
                 $muiti_builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
                 $muiti_builder->add($fashion_text);
                 $muiti_builder->add($shop_text);
+                $muiti_builder->add($shop_img);
+                $muiti_builder->add($shop_stamp);
                 $bot->replyMessage($reply_token,$muiti_builder);
             }
         }
