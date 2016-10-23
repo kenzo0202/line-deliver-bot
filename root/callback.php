@@ -106,6 +106,8 @@ foreach ($events as $event) {
             $carouselbuilder = new LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder($columns);
             $templatemessagebuilder = new LINE\LINEBot\MessageBuilder\TemplateMessageBuilder("代わりのテキスト",$carouselbuilder);
 
+            $bot->replyMessage($reply_token,$templatemessagebuilder);
+
         }else{
             $response = $bot->replyText($reply_token, $text);
         }
